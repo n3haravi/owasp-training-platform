@@ -9,6 +9,11 @@ class DeveloperVulnerability(SQLModel, table=True):
     user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
     vulnerability_id: Optional[int] = Field(default=None, foreign_key="vulnerability.id", primary_key=True)
 
+class DeveloperTrainingModule(SQLModel, table=True):
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
+    project_id: Optional[int] = Field(default=None, foreign_key="project.id", primary_key=True)
+    owasp: str = Field(primary_key=True)
+
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
@@ -50,6 +55,7 @@ class Vulnerability(SQLModel, table=True):
     mitigation: str
     
     application_id: Optional[int] = Field(default=None, foreign_key="application.id")
+    project_id: Optional[int] = Field(default=None, foreign_key="project.id")
     application: Optional[Application] = Relationship(back_populates="vulnerabilities")
     
     learners: List[User] = Relationship(back_populates="vulnerabilities_learned", link_model=DeveloperVulnerability)
